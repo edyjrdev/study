@@ -8,9 +8,14 @@ python --version
 ``` 
 pyenv install --list
 pyenv install 3.11.5
+pyenv install 3.13.11
 pyenv versions
 pyenv local 3.11.5
+pyenv global 3.13.11
 ```
+
+Global isola Python do Sistema.
+
 Path do pyenv deve ser superior ao Path do Python do Sistema.
 
 No Powershell criar Profile
