@@ -19,11 +19,11 @@ Global isola Python do Sistema.
 Path do pyenv deve ser superior ao Path do Python do Sistema.
 
 No Powershell criar Profile
+```
 notepad $PROFILE
-
 $env:PYENV_ROOT = "$env:USERPROFILE\.pyenv\pyenv-win"
 $env:Path = "$env:PYENV_ROOT\bin;$env:PYENV_ROOT\shims;$env:Path"
-
+```
 No windows configurar Path subindo variaveis de ambiente do pyenv acima do Python do Sistema.
 
 Atualizar pip da versão do pyenv
