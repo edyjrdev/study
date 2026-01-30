@@ -81,3 +81,6 @@ ehthumbs.db
 
 # Jupyter Notebook
 .ipynb_checkpoints
+
+#poetry
+poetry.lock
