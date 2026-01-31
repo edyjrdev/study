@@ -63,7 +63,7 @@ env.bak/
 venv.bak/
 
 # Pip freeze requirements
-requirements.txt
+# requirements.txt
 
 # Windows
 Thumbs.db
