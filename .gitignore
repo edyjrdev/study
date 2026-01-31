@@ -84,3 +84,4 @@ ehthumbs.db
 
 #poetry
 poetry.lock
+pyproject.toml
