@@ -58,3 +58,20 @@ polo = Carro.criar_carro(config_polo)
 print(polo.show())
 uno = Carro.criar_carro(config_uno)
 print(uno.show())
+
+
+class PLR():
+    def calcula_plr(tipo_empregado: str, salario: float, percentual: float):
+        plr_calculado = 0
+        match tipo_empregado.upper():
+            case 'GERENTE':
+                plr_calculado = salario + (2 * percentual * salario)
+            case 'EMPREGADO':
+                plr_calculado = salario * percentual
+            case _:
+                plr_calculado = 0
+        return plr_calculado
+
+print(PLR.calcula_plr('Gerente', 25000, 0.05))
+print(PLR.calcula_plr('Empregado', 5000, 0.10))
+print(PLR.calcula_plr('Estagiário', 1000, 0.00))
