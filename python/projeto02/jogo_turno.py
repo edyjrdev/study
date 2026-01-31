@@ -1,6 +1,7 @@
 # Jogo em Turno de Heroi contra Vilao
 
 import os, time
+from random import randint
 
 @staticmethod
 def linha():
@@ -30,7 +31,7 @@ class Personagem:
         return f'Nome:{self.get_nome()}\nVida:{self.get_vida()}\nNível:{self.get_nivel_dano()}'
 
     def atacar(self, alvo):
-        dano = self.get_nivel_dano() * 2
+        dano = self.get_nivel_dano() * randint(1, 5)
         alvo.receber_ataque(dano)
         linha_especial()
         print(f'{self.get_nome()} atacou {alvo.get_nome()} e causou {dano} de dano.')
@@ -54,7 +55,7 @@ class Heroi(Personagem):
         return f'{super().show()}\nSuper Poder:{self.get_superpoder()}'
     
     def especial(self, alvo):
-        dano = self.get_nivel_dano() * 5
+        dano = self.get_nivel_dano() * randint(2, 7)
         alvo.receber_ataque(dano)
         linha_especial()
         print(f'{self.get_nome()} usou {self.get_superpoder()} e causou {dano} de dano no {alvo.get_nome()}.')
@@ -78,8 +79,8 @@ class JogoTurno:
     """
     
     def __init__(self):
-        self.heroi = Heroi('Salvador', 110, 5,'Super Força')
-        self.vilao = Inimigo('Ciclope', 85, 2, 'Místico') 
+        self.heroi = Heroi('Salvador', randint(100, 150), randint(5,10),'Super Força')
+        self.vilao = Inimigo('Ciclope', randint(90, 120), randint(2,15), 'Místico') 
 
     def inicializar_batalha(self):
         print('Inicio da Batalha')
@@ -124,8 +125,8 @@ class JogoTurno:
                time.sleep(1) 
                
            os.system('cls')
+        linha_especial()
+        print('Fim de Jogo.')
 
 jogo = JogoTurno()
 jogo.inicializar_batalha()
-linha_especial()
-print('Fim de Jogo.')
