@@ -85,7 +85,11 @@ ehthumbs.db
 #poetry
 poetry.lock
 pyproject.toml
-.python-version
+#poetry projetos
+python/projeto01/pyproject.toml
+python/projeto02/pyproject.toml
 
 #pyenv
 .python-version
+python/projeto01/.python-version
+python/projeto02/.python-version
