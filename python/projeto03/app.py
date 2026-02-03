@@ -1,10 +1,33 @@
 # aplicação flask
 from flask import Flask, request, jsonify
+from flasgger import Swagger
+from pathlib import Path
 
 #modelo
 from models.task import Task
 
 app = Flask(__name__)  # nome do arquivo atual __main__
+# Use the static swagger.yaml as the Flasgger template
+swagger_spec_path = str(Path(__file__).parent / 'swagger.yaml')
+swagger = Swagger(app, template_file=swagger_spec_path)
+
+
+@app.route('/swagger.json', methods=['GET'])
+def swagger_json():
+    from pathlib import Path
+    p = Path(__file__).parent / 'swagger.json'
+    if not p.exists():
+        return jsonify({"message": "swagger.json not found"}), 404
+    return app.response_class(p.read_text(encoding='utf-8'), mimetype='application/json')
+
+
+@app.route('/swagger.yaml', methods=['GET'])
+def swagger_yaml():
+    from pathlib import Path
+    p = Path(__file__).parent / 'swagger.yaml'
+    if not p.exists():
+        return jsonify({"message": "swagger.yaml not found"}), 404
+    return app.response_class(p.read_text(encoding='utf-8'), mimetype='application/x-yaml')
 
 # exemplo
 """
@@ -68,12 +91,14 @@ def get_tasks():
 # Select by task_id
 @app.route('/tasks/<int:id>', methods=['GET'])
 def get_task_by_id(id):
-    for task in tasks:
-        if task.id == id:
-            return jsonify(task.to_dict())
+    task = None
+    for t in tasks:
+        if t.id == id:
+            task = t
             break
-    if not task:
-        return jsonify({"message": f"Tarefa {id} não encontrada"}), 404  # Código de retorno não encontrado.
+    if task is None:
+        return jsonify({"message": f"Tarefa {id} não encontrada"}), 404
+    return jsonify(task.to_dict())
 
 
 # Update by task_id -> body para dados
