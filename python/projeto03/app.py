@@ -74,7 +74,7 @@ def create_task():
     print(len(tasks))
 
     return jsonify(
-        {"message": f"Tarefa {new_task.id} criada com sucesso"}
+        {"message": f"Tarefa {new_task.id} criada com sucesso", "id":new_task.id}
         )
 
 # Create Read
@@ -118,7 +118,9 @@ def set_task(id):
     task.description = data.get("description","")
     task.done = data.get("done",False)
 
-    return jsonify({"message":f"Tarefa {id} atualizada com sucesso"})
+    return jsonify({"message":f"Tarefa {id} atualizada com sucesso", 
+                    "id":id, "title":task.title})
+
 
 # Delete
 @app.route('/tasks/<int:id>', methods=['DELETE'])
@@ -126,7 +128,7 @@ def delete_task(id):
     for t in tasks:
         if t.id == id:
             tasks.remove(t)
-            return jsonify({"message":f"Tarefa {id} removida com sucesso"})
+            return jsonify({"message":f"Tarefa {id} removida com sucesso", "id":id})
             break       
         
     return jsonify({"message":f"Tarefa {id} não encontrada"}), 404
