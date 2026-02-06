@@ -79,6 +79,78 @@ def hello_world():
     return "Hello Word."
 """
 
+# Usuarios
+# Create User
+@app.route('/user', methods=['POST'])
+@login_required  # Somente Usuario Existente
+def create_user():
+    data = request.json
+    username = data.get('username')
+    password = data.get('password')
+
+    if username and password:
+        #cadastrar
+        user = User(username=username, password=password)
+        
+        # Possivel erro de integridade (unique username)
+        try:
+            db.session.add(user)
+            db.session.commit()
+        except Exception as e:
+            print(e)
+            return jsonify({"message": "Erro de criação"}), 500    
+        return jsonify({
+            "message": f"Usuário {username.upper()} cadastrado com sucesso."}), 200
+    else:
+        return jsonify({
+            "message": "Dados inválidos.",
+            "campos": {"username": username, 
+                       "password": password} 
+        }), 401  # Requisição inválida
+
+# Get User
+@app.route('/user/<int:id>', methods=['GET'])
+@login_required
+def get_user_by_id(id):
+    user_db = User.query.get(id)
+
+    if user_db:
+        return jsonify({"username": user_db.username})
+    return jsonify({"message":"Usuário não cadastrado."}), 404
+
+@app.route('/user/<int:id>', methods=['PUT'])
+@login_required
+def update_user_by_id(id):
+    data = request.json
+    nova_senha = data.get('password')
+    user_db = User.query.get(id)
+
+    if user_db and nova_senha :
+        user_db.password = nova_senha # ja faz no bd
+        db.session.commit()
+
+        return jsonify({"message": f"{user_db.username} atualizado."})
+    return jsonify({"message":"Usuário não cadastrado."}), 404
+
+# Delete usuario
+# Get User
+@app.route('/user/<int:id>', methods=['DELETE'])
+@login_required
+def delete_user_by_id(id):
+    eh_user_logado = id == current_user.id
+    # Nao pode apagar o usario logado
+    if eh_user_logado:
+        return jsonify({"message":"Ação não permitida, não é possivel deletar usuário logado.", 
+                "id": id}), 403 # Não permitido
+
+    user_db = User.query.get(id)
+    if user_db:
+        username_del = user_db.username
+        db.session.delete(user_db)
+        db.session.commit()
+        return jsonify({"message": f"{username_del} deletado."})
+    return jsonify({"message":"Usuário não cadastrado."}), 404
+
 if __name__ == '__main__':
     # DEV com debug On
     # BASE_URL = http://127.0.0.1:5001
