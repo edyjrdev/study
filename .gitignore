@@ -83,15 +83,15 @@ ehthumbs.db
 .ipynb_checkpoints
 
 #poetry
-poetry.lock
-pyproject.toml
+# poetry.lock
+# pyproject.toml
 #poetry projetos
-python/projeto01/pyproject.toml
-python/projeto02/pyproject.toml
+# python/projeto01/pyproject.toml
+# python/projeto02/pyproject.toml
 
 #pyenv
-.python-version
-python/projeto01/.python-version
-python/projeto02/.python-version
+# .python-version
+# python/projeto01/.python-version
+# python/projeto02/.python-version
 
 
