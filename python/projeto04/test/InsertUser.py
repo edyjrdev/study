@@ -13,7 +13,7 @@ from database import db
 def cria_user_admin():
     with app.app_context():
         if not User.query.filter_by(username='admin').first():
-            user = User(username='admin', password='admin123')
+            user = User(username='admin', password='admin123', role='admin')
             db.session.add(user)
             db.session.commit()
             print('Usuário admin criado.')

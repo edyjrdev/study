@@ -42,8 +42,8 @@ def login():
                 print(current_user.is_authenticated)
                 return jsonify(
                     {
-                        "message":f"Bem vindo, {username.upper()}.",
-                        "username": username
+                        "message":f"Bem vindo, {user_db.username.upper()} como {user_db.role.upper()}.",
+                        "username": user_db.username
                     }
                 ), 200  # Sucess (Padrão)
         else:
@@ -90,7 +90,7 @@ def create_user():
 
     if username and password:
         #cadastrar
-        user = User(username=username, password=password)
+        user = User(username=username, password=password, role='user')  # adicionar usuario com role menor
         
         # Possivel erro de integridade (unique username)
         try:
@@ -100,7 +100,7 @@ def create_user():
             print(e)
             return jsonify({"message": "Erro de criação"}), 500    
         return jsonify({
-            "message": f"Usuário {username.upper()} cadastrado com sucesso."}), 200
+            "message": f"Usuário {user.username.upper()} cadastrado com {user.role.upper()} com sucesso."}), 200
     else:
         return jsonify({
             "message": "Dados inválidos.",
@@ -124,12 +124,20 @@ def update_user_by_id(id):
     data = request.json
     nova_senha = data.get('password')
     user_db = User.query.get(id)
+    cur_user = User.query.get(current_user.id)
+    # usario com role admin pode alterar qualquer usuario
+    # usuario com role user nao pode alterar outro usuario
+    outro_usuario = id != current_user.id
+    role_user = current_user.role == 'user'
+
+    if outro_usuario and role_user:
+        return jsonify({"message": f"Operaçao nao permitida para {cur_user.role.upper()}."}), 403  # Proibido
 
     if user_db and nova_senha :
         user_db.password = nova_senha # ja faz no bd
         db.session.commit()
 
-        return jsonify({"message": f"{user_db.username} atualizado."})
+        return jsonify({"message": f"{user_db.username.upper()} atualizado."})
     return jsonify({"message":"Usuário não cadastrado."}), 404
 
 # Delete usuario
@@ -137,10 +145,18 @@ def update_user_by_id(id):
 @app.route('/user/<int:id>', methods=['DELETE'])
 @login_required
 def delete_user_by_id(id):
-    eh_user_logado = id == current_user.id
+    cur_user = User.query.get(current_user.id)
+
+    eh_user_logado = id == cur_user.id
+    
+    role_user = current_user.role == 'user'
+    # User nao passara
+    if role_user:
+        return jsonify({"message": f"Operaçao nao permitida para {cur_user.role.upper()}."}), 403  # Proibido 
+    
     # Nao pode apagar o usario logado
     if eh_user_logado:
-        return jsonify({"message":"Ação não permitida, não é possivel deletar usuário logado.", 
+        return jsonify({"message":f"Ação não permitida, não é possivel deletar usuário logado:{cur_user.username.upper()}.", 
                 "id": id}), 403 # Não permitido
 
     user_db = User.query.get(id)
