@@ -7,7 +7,7 @@ from flask_login import LoginManager, login_user, current_user, logout_user, log
 app = Flask(__name__)
 # Secrety Key e Conexão BD
 app.config['SECRET_KEY'] = 'chave_secreta'
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:admin123@127.0.0.1:3306/flask-crud'
 
 # passar configurações do app para o database
 login_manager = LoginManager()
