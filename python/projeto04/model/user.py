@@ -7,7 +7,7 @@ class User(db.Model, UserMixin):  # Herança Multipla tudo do SQLAlchemy e UserM
     # Mapeamento de colunas
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(80), unique=True, nullable=False)  # Unico não aceita nulo
-    password = db.Column(db.String(25), nullable=False) # não aceita nulo
+    password = db.Column(db.String(80), nullable=False) # não aceita nulo
     role = db.Column(db.String(10), nullable=False, default='user')  # dominio: admin, user
 """
 Criar usuario admin

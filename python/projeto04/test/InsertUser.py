@@ -9,11 +9,14 @@ if PROJECT_ROOT not in sys.path:
 from app import app
 from model.user import User
 from database import db
+import bcrypt
 
 def cria_user_admin():
+    password='admin123'
     with app.app_context():
+        senha_hash = bcrypt.hashpw(str.encode(password), bcrypt.gensalt())
         if not User.query.filter_by(username='admin').first():
-            user = User(username='admin', password='admin123', role='admin')
+            user = User(username='admin', password=senha_hash, role='admin')
             db.session.add(user)
             db.session.commit()
             print('Usuário admin criado.')

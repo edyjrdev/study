@@ -2,7 +2,7 @@ from flask import Flask, request, jsonify
 from database import db
 from model.user import User
 from flask_login import LoginManager, login_user, current_user, logout_user, login_required
-
+import bcrypt
 
 app = Flask(__name__)
 # Secrety Key e Conexão BD
@@ -29,15 +29,20 @@ def login():
     
     username = data.get('username')
     password = data.get('password')
+    password_byte = str.encode(password)
+
     if username and password:
         # login
-
+        
         # consultar username no br
         user_db = User.query.filter_by(username=username).first()  # Pega o primeiro registra da lista da consulta
         # usuario existe
         if user_db:
             # se exister conferir senha
-            if user_db.password == password:
+            # comparar senha criptografada
+            senha_cript = str.encode(user_db.password)
+            check_senha = bcrypt.checkpw(password_byte, senha_cript)
+            if check_senha:
                 login_user(user_db)  # Header da response com Set-Cookie -> session=<HASH>
                 print(current_user.is_authenticated)
                 return jsonify(
@@ -89,8 +94,10 @@ def create_user():
     password = data.get('password')
 
     if username and password:
+        # criptografar senha
+        senha_hash = bcrypt.hashpw(str.encode(password), bcrypt.gensalt())
         #cadastrar
-        user = User(username=username, password=password, role='user')  # adicionar usuario com role menor
+        user = User(username=username, password=senha_hash, role='user')  # adicionar usuario com role menor
         
         # Possivel erro de integridade (unique username)
         try:
