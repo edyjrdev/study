@@ -4,7 +4,10 @@
 Git e Github. 
 
 ## 🐍 Python
-Utilizando boas práticas com Git, pyenv, pipx e poetry nos projetos.
+Utilizando boas práticas com Git, pyenv, pipx e poetry nos projetos.  
+[UV](https://docs.astral.sh/uv/)  
+[Poetry](https://python-poetry.org/docs/)  
+[PyEnv](https://github.com/pyenv/pyenv)  
 
 ## 🗄️SQL  
 
